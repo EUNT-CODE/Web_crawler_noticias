@@ -11,6 +11,7 @@ options.add_argument("--disable-gpu")
 driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 base_url="https://myanimelist.net/news"
 news_list=[]
+
 def extract_news():
     driver.get(base_url)
     time.sleep(5)
@@ -20,7 +21,7 @@ def extract_news():
         print("No se encontraron noticias")
     for article in articles:
         title=article.find("p", class_="title").find("a").text.strip() if article.find("p", class_="title") else "Titulo no disponible"
-        link=article.find("p", class_="title").find("a")["href"] if article.find("a") else "No disponible"
+        link=article.find("p", class_="title").find("a")["href"] if article.find("a") else "Enlace no disponible"
         description=article.find("div", class_="text").text.strip() if article.find("div", class_="text") else "Descripcion no disponible"
         print(f"Titulo: {title}")
         print(f"Enlace: {link}")
@@ -31,5 +32,4 @@ df = pd.DataFrame(news_list)
 print(df.head())
 df.to_csv("noticias_anime.csv", index=False, encoding="utf-8")
 print("Archivo csv generado con exito.")
-
 driver.quit()
